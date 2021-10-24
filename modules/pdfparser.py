@@ -15,10 +15,16 @@ class PdfParser():
         pages_to_keep = set()
         for page in doc : 
             for word in self.word_list: 
-                rl = page.search_for(word, quads=True)
-                if len(rl) != 0 :
+                searches_results = page.search_for(word, quads=True)
+                if len(searches_results) != 0 :
                     pages_to_keep.add(page_nb)
-                    page.add_squiggly_annot(rl)
+                    page.add_highlight_annot(searches_results)
+            for ewd in ['MWh','mwh','GWh','gwh','GJ','TJ','gj','tj']:
+                regex_results_energy = page.search_for(ewd, quads=False)
+                if len(regex_results_energy) != 0:
+                    print(regex_results_energy)
+                    for r in regex_results_energy : 
+                        page.add_rect_annot(r)
             page_nb+=1
         doc.select(list(pages_to_keep))
         doc.save(self.store_loc+".pdf")

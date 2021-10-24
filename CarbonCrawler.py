@@ -21,6 +21,7 @@ def crawl_report(sender, data):
     dpg.set_value(item='status_tag', value="I'm DONE !")#, color=[0,181,6])
     
     
+    
 
 global word_list
 word_list = []
@@ -80,22 +81,11 @@ with dpg.window(tag="main"):
     dpg.add_spacer(height=10)
 
     dpg.add_text("Where should I put all my findings ? For now I'm thinking here : ")
-    dpg.add_text(os.getcwd(), tag="result_folder_tag")
+    dpg.add_text(os.getcwd()+'/results/result.pdf', tag="result_folder_tag")
     dpg.add_button(label="Select folder", callback=lambda: dpg.show_item("folder_dialog_tag"))
     dpg.add_spacer(height=5)
     dpg.add_separator()
 
-    #WEBSITE SELECTION
-    dpg.add_spacer(height=5)
-    dpg.add_text(default_value='Enter website (with www.blablabla and .com or .fr pleaaase)')
-    dpg.add_input_text(label='', tag='website')
-    dpg.add_spacer(height=5)
-    dpg.add_checkbox(label='look for pdfs on pages with matches and download them (will take a little longer if selected)', tag="pdf_tag")
-    dpg.add_checkbox(label='look for text content directly on the site', tag="text_tag")
-
-    dpg.add_button(label="Crawl website", callback=crawl_website)
-    dpg.add_spacer(height=5)
-    dpg.add_separator()
     # REPORT CRAWLER
     dpg.add_spacer(height=5)
     dpg.add_button(label="Select Report to crawl", callback=lambda: dpg.show_item("report_dialog_tag"))
@@ -108,7 +98,21 @@ with dpg.window(tag="main"):
     dpg.add_spacer(height=5)
     dpg.add_button(label="Crawl report", callback=crawl_report)
 
+    #WEBSITE SELECTION
+    dpg.add_spacer(height=5)
+    dpg.add_separator()
+    dpg.add_spacer(height=5)
+    dpg.add_separator()
+    dpg.add_spacer(height=5)
+    dpg.add_text(default_value='Enter website (with www.blablabla and .com or .fr pleaaase)')
+    dpg.add_input_text(label='', tag='website')
+    dpg.add_spacer(height=5)
+    dpg.add_checkbox(label='look for pdfs on pages with matches and download them (will take a little longer if selected)', tag="pdf_tag")
+    dpg.add_checkbox(label='look for text content directly on the site', tag="text_tag")
 
+    dpg.add_button(label="Crawl website", callback=crawl_website)
+    dpg.add_spacer(height=5)
+    dpg.add_separator()
 
 
 

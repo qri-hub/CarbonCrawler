@@ -3,6 +3,10 @@ import dearpygui.dearpygui as dpg
 import os 
 import modules.crawler as crawler
 import modules.pdfparser as pdfparser
+global word_list, report_name
+word_list = []
+report_name = ''
+
 def crawl_website(sender, app_data):
     print(f'sender is : {sender}')
     print(f'data is : {app_data}')
@@ -15,17 +19,11 @@ def crawl_website(sender, app_data):
 
 def crawl_report(sender, data):
     dpg.set_value(item='status_tag', value='PARSING FILE, this might take a while')#, color=[191,108,0])
-    parser = pdfparser.PdfParser(word_list, dpg.get_value(item='report_name_tag'), dpg.get_value(item='result_folder_tag'))
+    parser = pdfparser.PdfParser(word_list, fpath=dpg.get_value(item='report_name_tag'), store_loc=dpg.get_value(item='result_folder_tag'), fname=report_name)
     parser.parse_and_highlight()
     print('Done Parsing pdf')
     dpg.set_value(item='status_tag', value="I'm DONE !")#, color=[0,181,6])
     
-    
-    
-
-global word_list
-word_list = []
-
 def file_selection(sender, app_data):
     file = list(app_data['selections'].keys())[0]
     fname = app_data['selections'][file]
@@ -39,13 +37,15 @@ def file_selection(sender, app_data):
     
 def folder_selection(sender, app_data):
     file = list(app_data['selections'].keys())[0]
-    fname = app_data['selections'][file]
+    fname = app_data['selections'][file][:-len(file)]
     dpg.set_value(item="result_folder_tag", value=str(fname))
 
 def report_selection(sender, app_data):
     print("Sender: ", sender)
     file = list(app_data['selections'].keys())[0]
     fname = app_data['selections'][file]
+    global report_name 
+    report_name = file
     dpg.set_value(item="report_name_tag", value=str(fname))
 
 
@@ -98,23 +98,21 @@ with dpg.window(tag="main"):
     dpg.add_spacer(height=5)
     dpg.add_button(label="Crawl report", callback=crawl_report)
 
-    #WEBSITE SELECTION
-    dpg.add_spacer(height=5)
-    dpg.add_separator()
-    dpg.add_spacer(height=5)
-    dpg.add_separator()
-    dpg.add_spacer(height=5)
-    dpg.add_text(default_value='Enter website (with www.blablabla and .com or .fr pleaaase)')
-    dpg.add_input_text(label='', tag='website')
-    dpg.add_spacer(height=5)
-    dpg.add_checkbox(label='look for pdfs on pages with matches and download them (will take a little longer if selected)', tag="pdf_tag")
-    dpg.add_checkbox(label='look for text content directly on the site', tag="text_tag")
+    ##WEBSITE SELECTION
+    #dpg.add_spacer(height=5)
+    #dpg.add_separator()
+    #dpg.add_spacer(height=5)
+    #dpg.add_separator()
+    #dpg.add_spacer(height=5)
+    #dpg.add_text(default_value='Enter website (with www.blablabla and .com or .fr pleaaase)')
+    #dpg.add_input_text(label='', tag='website')
+    #dpg.add_spacer(height=5)
+    #dpg.add_checkbox(label='look for text content directly on the site', tag="text_tag")
+    #dpg.add_checkbox(label='look for pdfs on pages with matches and download them (will take a little longer if selected)', tag="pdf_tag")
 
-    dpg.add_button(label="Crawl website", callback=crawl_website)
-    dpg.add_spacer(height=5)
-    dpg.add_separator()
-
-
+    #dpg.add_button(label="Crawl website", callback=crawl_website)
+    #dpg.add_spacer(height=5)
+    #dpg.add_separator()
 
 dpg.create_viewport(title='Carbon Crawler', width=800, height=800)
 dpg.setup_dearpygui()

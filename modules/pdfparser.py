@@ -4,10 +4,11 @@ from fitz.fitz import Outline
 
 class PdfParser():
 
-    def __init__(self, word_list, fpath, store_loc) -> None:
+    def __init__(self, word_list, fpath, store_loc, fname) -> None:
         self.word_list = word_list
         self.fpath = fpath
         self.store_loc = store_loc
+        self.fname=fname
     
     def parse_and_highlight(self):
         doc = fitz.open(self.fpath)
@@ -25,9 +26,10 @@ class PdfParser():
                     print(regex_results_energy)
                     for r in regex_results_energy : 
                         page.add_rect_annot(r)
+                        page.add_circle_annot(r)
             page_nb+=1
         doc.select(list(pages_to_keep))
-        doc.save(self.store_loc+".pdf")
+        doc.save(self.store_loc+self.fname+"_parsed.pdf")
         
 
         

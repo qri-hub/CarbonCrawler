@@ -1,5 +1,6 @@
 from os import listdir
 from os.path import isfile, join
+import shutil
 import fitz
 from fitz.fitz import Outline
 
@@ -43,6 +44,7 @@ def word_list(fname):
 def main():
     mpath = 'C:\\Users\\Quense\\Documents\\CarbonCrawler\\pool\\'
     rpath = 'C:\\Users\\Quense\\Documents\\CarbonCrawler\\results_pool\\'
+    spath = 'C:\\Users\\Quense\\Documents\\CarbonCrawler\\processed\\'
     annual_word_path = 'C:\\Users\\Quense\\Documents\\CarbonCrawler\\word_list_annual.txt'
     sustain_word_path = 'C:\\Users\\Quense\\Documents\\CarbonCrawler\\word_list_report.txt'
     word_list_annual = word_list(annual_word_path)
@@ -58,6 +60,7 @@ def main():
             print('Annual : {}'.format(f))
             parser = PdfParser(word_list=word_list_annual, fpath=mpath+f, store_loc=rpath, fname=f)
             parser.parse_and_highlight()
+        shutil.move(mpath+f, 'C:\\Users\\Quense\\Documents\\CarbonCrawler\\processed\\'+f)
 
 if __name__ == '__main__':
     main()
